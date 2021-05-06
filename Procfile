@@ -1,1 +1,1 @@
-web: web: gunicorn techbox.wsgi
+web: web: gunicorn techbox.wsgi --log-file -
