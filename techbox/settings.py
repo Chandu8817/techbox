@@ -18,9 +18,6 @@ from sentry_sdk.integrations.django import DjangoIntegration
 import django_heroku
 
 
-# Activate Django-Heroku.
-django_heroku.settings(locals())
-
 sentry_sdk.init(
     dsn="https://0a75ceeda2fe40839e5b1baef296b282@o585850.ingest.sentry.io/5737904",
     integrations=[DjangoIntegration()],
@@ -55,7 +52,7 @@ SECRET_KEY = 'ktm+wq&ike32t9=t3$enm3de_l=yyn7g)c=u@7b@j&v)2l4r22'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["shaktimaanketool.herokuapp.com"]
+ALLOWED_HOSTS = ['shaktimaanketool.herokuapp.com']
 
 # Application definition
 
@@ -76,7 +73,6 @@ INSTALLED_APPS = [
 CELERY_RESULT_BACKEND = 'django-db'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware' #heroku
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -153,14 +149,9 @@ USE_L10N = True
 USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-
-
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-
-STATIC_URL = 'static'
+STATIC_URL = '/static/'
 
 # Add static file directory
 STATICFILES_DIRS = (
@@ -180,8 +171,9 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "chandrashekhar.thoughtwin@gmail.com"
-EMAIL_HOST_PASSWORD = "chandu8969"
+EMAIL_HOST_PASSWORD = "guddu8969"
 
 
 
 
+django_heroku.settings(locals())
