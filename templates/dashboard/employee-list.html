@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        {% include 'dashboard/sidebar.html' %}
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                {% include 'dashboard/navbar.html' %}
+                {% for message in messages %}
+
+                    <div class="alert {{ message.tags }} alert-dismissible"
+                         role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <p class="h6  mb-4"> {{ message }}</p>
+
+
+                    </div>
+                {% endfor %}
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Employees </h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn text-light" data-toggle="modal"
+                                    style=" background-image: linear-gradient(to right, darkslategray,#1a202c)"
+                                    data-target="#newempdata">
+                                Add New Employee
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="newempdata" tabindex="-1" role="dialog"
+                                 aria-labelledby="newempdataTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header text-light"
+                                             style=" background-image: linear-gradient(to right,#1a202c,darkslategray)">
+                                            <h5 class="modal-title" id="newempdataTitle">Modal title</h5>
+                                            <button type="button" class="close text-light" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="tool-form">
+                                                {#                                {% csrf_token %}#}
+                                                {{ form.as_p }}
+                                                <br>
+
+
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="button" class="btn text-light" id="emp-btn"
+                                                    style=" background-image: linear-gradient(to right,#1a202c,darkslategray)">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered text-dark" id="dataTable" width="100%"
+                                       cellspacing="0">
+                                    <thead class="text-light"
+                                           style=" background-image: linear-gradient(to right, #1a202c, darkslategray)">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Designation</th>
+                                        <th>Address</th>
+                                        <th>Mobile</th>
+                                        <th>Email</th>
+                                        <th>Date of Birth</th>
+                                        <th>View Profile</th>
+
+
+                                    </tr>
+                                    </thead>
+                                    <tfoot class=" text-light"
+                                           style=" background-image: linear-gradient(to right, #1a202c, darkslategray)">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Designation</th>
+                                        <th>Address</th>
+                                        <th>Mobile</th>
+                                        <th>Email</th>
+                                        <th>Date of Birth</th>
+                                        <th>View Profile</th>
+                                    </tr>
+                                    </tfoot>
+
+                                    <tbody class="empdata">
+                                    {% for employee in employees %}
+                                        <tr>
+                                            <td>{{ employee.name }}</td>
+                                            <td> {{ employee.get_designation_display }}</td>
+                                            <td>{{ employee.address }}</td>
+                                            <td>{{ employee.mobile }}</td>
+                                            <td>{{ employee.email }}</td>
+                                            <td>{{ employee.date_of_birth }}</td>
+                                            {#                                            <td><a href="{% url 'employee_detail' employee.id %}"><button class="btn-outline-primary rounded-pill">View </button></a></td>#}
+                                            <td>
+
+                                                <div>
+                                                    <button type="button" class="btn btn-outline-dark"
+                                                            data-id="{{ employee.id }}" id="view-emp-btn"
+                                                            data-toggle="modal"
+                                                            data-target="#empModal{{ employee.id }}">view profile
+                                                    </button>
+                                                </div>
+
+                                                <!-- Modal -->
+                                                <div class="modal fade bd-example-modal-lg"
+                                                     id="empModal{{ employee.id }}" tabindex="-1" role="dialog"
+                                                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-lg"
+                                                         role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header"
+                                                                 style=" background-image: linear-gradient(to right, #1a202c, darkslategray)">
+                                                                <h5 class="modal-title" id="exampleModalLongTitle">
+                                                                    Employee Profile</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+
+                                                                <div class="container-fluid ">
+                                                                    <div class="main-body">
+
+                                                                        <div class="row ">
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <div class="card">
+                                                                                    <div class="card-body bg-gradient-dark rounded">
+                                                                                        <div class="d-flex flex-column align-items-center text-center ">
+                                                                                            <img src="{{ employee.image.url }}"
+                                                                                                 alt="Admin"
+                                                                                                 class="rounded"
+                                                                                                 width="150"
+                                                                                                height="150">
+                                                                                            <div class="mt-3">
+
+                                                                                                <p class="text-light mb-1">{{ employee.get_designation_display }}</p>
+                                                                                                <br>
+
+                                                                                                <a href="{% url 'update_employee' employee.id %}">
+                                                                                                    <button class="btn btn-outline-success">
+                                                                                                        Update
+                                                                                                    </button>
+                                                                                                </a>
+                                                                                                <button class="btn btn-outline-danger"
+                                                                                                        id="emp-del-btn"
+                                                                                                        data-id="{{ employee.id }}">
+                                                                                                    Remove
+                                                                                                </button>
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div class="col-md-8 ">
+                                                                                <div class="card mb-3">
+                                                                                    <div class="card-body">
+                                                                                        <div class="row">
+                                                                                            <div class="col-sm-3">
+                                                                                                <h6 class="mb-0">Full
+                                                                                                    Name</h6>
+                                                                                            </div>
+                                                                                            <div class="col-sm-9 text-secondary">
+                                                                                                {{ employee.name }}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <hr>
+                                                                                        <div class="row">
+                                                                                            <div class="col-sm-3">
+                                                                                                <h6 class="mb-0">
+                                                                                                    Email</h6>
+                                                                                            </div>
+                                                                                            <div class="col-sm-9 text-secondary">
+                                                                                                {{ employee.email }}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <hr>
+                                                                                        <div class="row">
+                                                                                            <div class="col-sm-3">
+                                                                                                <h6 class="mb-0">
+                                                                                                    Mobile</h6>
+                                                                                            </div>
+                                                                                            <div class="col-sm-9 text-secondary">
+                                                                                                {{ employee.mobile }}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <hr>
+                                                                                        <div class="row">
+                                                                                            <div class="col-sm-3">
+                                                                                                <h6 class="mb-0">
+                                                                                                    Address</h6>
+                                                                                            </div>
+                                                                                            <div class="col-sm-9 text-secondary">
+                                                                                                {{ employee.address }}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <hr>
+                                                                                        <div class="row">
+                                                                                            <div class="col-sm-3">
+                                                                                                <h6 class="mb-0">
+                                                                                                    Date of birth</h6>
+                                                                                            </div>
+                                                                                            <div class="col-sm-9 text-secondary">
+                                                                                                {{ employee.date_of_birth }}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <hr>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Close
+                                                                </button>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    {% block js %}
+        <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#myTable').DataTable();
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $(document).on('click', '#emp-btn', function (e) {
+                    e.preventDefault();
+
+                    var formData = new FormData();
+                    formData.append('image', $('#emp-image')[0].files[0]);
+                    formData.append("name", $('#emp-name').val());
+                    formData.append("designation", $('#emp-designation').val());
+                    formData.append("address", $('#emp-address').val());
+                    formData.append("mobile", $('#emp-mobile').val());
+                    formData.append("email", $('#emp-email').val());
+                    formData.append("date_of_birth", $('#emp-dob').val());
+                    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'add_employee' %}",
+                        data: formData,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                                  $('.empdata').append(response);
+                                   $('#newempdata').modal('hide');
+                            location.reload();
+
+                        },
+                    });
+                });
+
+            });
+        </script>
+        <script>
+            $(document).on('click', '#emp-del-btn', function (e) {
+                e.preventDefault();
+                var obj = $(this); // first store $(this) in obj
+                var id = $(this).data('id'); // get id of data using this
+                var my_data = {
+
+                    "id": id,
+                    'csrfmiddlewaretoken': "{{ csrf_token }}",
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'delete_employee'%}",
+                    data: my_data,
+                    success: function (json) {
+                        $(obj).closest("tr").remove();
+                        alert("Employee remove successfully ")
+
+                        $('#empModal'+id).modal('hide')
+
+                        location.reload();
+                    },
+                });
+            });
+
+        </script>
+
+    {% endblock js %}
+
+{% endblock %}
+
+
+

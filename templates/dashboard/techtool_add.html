@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        {% include 'dashboard/sidebar.html' %}
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                {% include 'dashboard/navbar.html' %}
+                {% for message in messages %}
+
+                    <div class="alert text-success {{ message.tags }} alert-dismissible"
+                         role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <p class="h6  mb-4"> {{ message }}</p>
+
+
+                    </div>
+                {% endfor %}
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800"> Add New Employee </h1>
+                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+                        For more information about DataTables, please visit the <a target="_blank"
+                                                                                   href="https://datatables.net">official
+                            DataTables documentation</a>.</p>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+
+                        <div class="container">
+
+                            <div id="tool-form">
+                                {#                                {% csrf_token %}#}
+                                {{ form.as_p }}
+                                <br>
+
+                                <input type="button" class="btn btn-primary" id="tech-btn" value="Submit">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block js %}
+
+        <script>
+            $(document).ready(function () {
+                $(document).on('click', '#tech-btn', function (e) {
+                    e.preventDefault();
+                    var tool_name = $('#tool-name').val();
+                    var checked = $('#tool-status').is(':checked');
+                    if (checked) {
+                        var tool_status = "on"
+
+                    }
+                    var my_data = {
+                        "name": tool_name,
+                        "status": tool_status,
+                        'csrfmiddlewaretoken': "{{ csrf_token }}",
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'add_techtool' %}",
+                        data: my_data,
+                        success: function (json) {
+                            $('.new_comment').append(json);
+                        },
+                    });
+                });
+
+            });
+        </script>
+    {% endblock js %}
+
+
+
+
+
+
+{% endblock %}
